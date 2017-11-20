@@ -55,9 +55,7 @@ ENV DOCKER_BUILD_HOME "/dockerbuild"
 # ~. tools
 # 1. essentials
 # 2. apache httpd
-# 3. mariadb
 # 4. php
-# 5. phpmyadmin
 # 6. ssh
 # ====================
 
@@ -130,13 +128,6 @@ RUN set -ex \
 		$HTTPD_HOME/manual \
 	&& rm $DOCKER_BUILD_HOME/httpd.tar.gz \
 	&& apt-get purge -y -V -o APT::AutoRemove::RecommendsImportant=false --auto-remove $httpdBuildtimeDeps \
-
-	# ----------
-	# 3. mariadb
-	# ----------
-	&& apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install mariadb-server -y -V --no-install-recommends \
-	&& rm -r /var/lib/apt/lists/* \
 
 	# ------
 	# 4. php
@@ -218,14 +209,6 @@ RUN set -ex \
 	&& rm -rf $PHP_HOME/php/man \
 	&& rm $DOCKER_BUILD_HOME/php.tar.gz \
 	&& apt-get purge -y -V -o APT::AutoRemove::RecommendsImportant=false --auto-remove $phpBuildtimeDeps \
-
-	# -------------
-	# 5. phpmyadmin
-	# -------------
-	&& mkdir -p $PHPMYADMIN_SOURCE \
-	&& cd $PHPMYADMIN_SOURCE \
-	&& wget -O phpmyadmin.tar.gz "$PHPMYADMIN_DOWNLOAD_URL" --no-check-certificate \
-	&& echo "$PHPMYADMIN_SHA256 *phpmyadmin.tar.gz" | sha256sum -c - \
 
 	# ------
 	# 6. ssh
